@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-
+import Demo, {props as P} from 'react-demo'
 import Tree from 'react-data-tree'
 
 import './index.css'
@@ -8,43 +8,47 @@ export default class App extends Component {
   render () {
     return (
       <div>
-        <h1>react-data-tree</h1>
-        <Tree
-          connectorsStyle={{
-            tickness: 5,
-            color: 'purple',
-            radius: 7,
-            height: 15
-          }}
-          data={{
-            text: 'root',
-            children: [{
-              text: 'foo'
-            },
-            {
-              text: 'foo',
+        <Demo
+          background={'none'}
+          target={Tree}
+          props={{
+            rootPosition: P.choices(['top', 'right', 'bottom', 'left']),
+            connectorsStyle: P.shape({
+              tickness: P.number(1),
+              color: P.string('DarkSlateGray'),
+              radius: P.number(5),
+              height: P.number(15)
+            }),
+            data: P.json({
+              text: 'root',
               children: [{
                 text: 'foo'
               },
               {
-                text: 'bar'
-              },
-              {
-                text: 'baz'
-              }]
-            },
-            {
-              text: 'baz',
-              children: [{
                 text: 'foo',
                 children: [{
-                  text: 'Yeahhhhh /o/'
+                  text: 'foo'
+                },
+                {
+                  text: 'bar'
+                },
+                {
+                  text: 'baz'
                 }]
               },
               {
-                text: 'bar'
+                text: 'baz',
+                children: [{
+                  text: 'foo',
+                  children: [{
+                    text: 'Yeahhhhh /o/'
+                  }]
+                },
+                {
+                  text: 'bar'
+                }]
               }]
-            }]
+            })
           }}
         />
       </div>
