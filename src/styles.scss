@@ -1,0 +1,232 @@
+$connectorTickness: 1px;
+$connectorStyle: $connectorTickness solid #ccc;
+$connectorRadius: 5px;
+$connectorHeight: 15px;
+
+.Tree {
+  .Subtree {
+    &__Before {
+      position: absolute;
+    }
+
+    &__Node {
+      position: relative;
+      display: flex;
+
+      &__After {
+        align-self: center;
+      }
+      &__Before {
+        align-self: center;
+      }
+
+      &__Content {
+        padding: .5rem;
+        border-style: solid;
+        border-radius: 5px;
+        background-color: white;
+      }
+    }
+  }
+
+  ul {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    padding: 0;
+    border-style: none;
+  }
+
+  .Subtree {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  & > ul > .Subtree::before {
+    border: none;
+  }
+
+  &--left, &--right {
+    .Subtree {
+      &__Before {
+        width: $connectorHeight;
+        height: 100%;
+      }
+
+      &--first > .Subtree__Before {
+        top: calc(50% - #{$connectorTickness} / 2);
+        height: 50%;
+        border-top: $connectorStyle;
+      }
+
+      &--last > .Subtree__Before {
+        bottom: calc(50% - #{$connectorTickness} / 2);
+        height: 50%;
+        border-bottom: $connectorStyle;
+      }
+
+      &__Node {
+        &__Before,
+        &__After {
+          width: $connectorHeight;
+          border-bottom: $connectorStyle;
+        }
+
+        &__Content {
+          margin: 1rem 0;
+        }
+      }
+    }
+
+    ul {
+      flex-direction: column;
+    }
+  }
+
+  &--top, &--bottom {
+    .Subtree {
+      &__Before {
+        height: $connectorHeight;
+        width: 100%;
+      }
+
+      &--first > .Subtree__Before {
+        left: calc(50% - #{$connectorTickness} / 2);
+        width: 50%;
+        border-left: $connectorStyle;
+      }
+
+      &--last > .Subtree__Before {
+        right: calc(50% - #{$connectorTickness} / 2);
+        width: 50%;
+        border-right: $connectorStyle;
+      }
+
+      &__Node {
+        &__Before,
+        &__After {
+          height: $connectorHeight;
+          border-left: $connectorStyle;
+        }
+
+        &__Content {
+          margin: 0 1rem;
+        }
+      }
+    }
+
+    ul {
+      flex-direction: row;
+    }
+  }
+
+  &--top {
+    .Subtree {
+      flex-direction: column;
+
+      &__Before {
+        border-top: $connectorStyle;
+      }
+
+      &--first > .Subtree__Before {
+        border-top-left-radius: $connectorRadius;
+      }
+
+      &--last > .Subtree__Before {
+        border-top-right-radius: $connectorRadius;
+      }
+
+      &--first > .Subtree__Node,
+      &--last > .Subtree__Node {
+        margin-top: $connectorHeight;
+      }
+
+      &__Node {
+        flex-direction: column;
+      }
+    }
+  }
+
+  &--right {
+    .Subtree {
+      flex-direction: row-reverse;
+
+      &__Before {
+        border-right: $connectorStyle;
+      }
+
+      &--first > .Subtree__Before {
+        border-top-right-radius: $connectorRadius;
+      }
+
+      &--last > .Subtree__Before {
+        border-bottom-right-radius: $connectorRadius;
+      }
+
+      &--first > .Subtree__Node,
+      &--last > .Subtree__Node {
+        margin-right: $connectorHeight;
+      }
+
+      &__Node {
+        flex-direction: row-reverse;
+      }
+    }
+  }
+
+  &--bottom {
+    .Subtree {
+      flex-direction: column-reverse;
+
+      &__Before {
+        border-bottom: $connectorStyle;
+      }
+
+      &--first > .Subtree__Before {
+        border-bottom-left-radius: $connectorRadius;
+      }
+
+      &--last > .Subtree__Before {
+        border-bottom-right-radius: $connectorRadius;
+      }
+
+      &--first > .Subtree__Node,
+      &--last > .Subtree__Node {
+        margin-bottom: $connectorHeight;
+      }
+
+      &__Node {
+        flex-direction: column-reverse;
+      }
+    }
+  }
+
+  &--left {
+    .Subtree {
+      flex-direction: row;
+
+      &__Before {
+        border-left: $connectorStyle;
+      }
+
+      &--first > .Subtree__Before {
+        border-top-left-radius: $connectorRadius;
+      }
+
+      &--last > .Subtree__Before {
+        border-bottom-left-radius: $connectorRadius;
+      }
+
+      &--first > .Subtree__Node,
+      &--last > .Subtree__Node {
+        margin-left: $connectorHeight;
+      }
+
+      &__Node {
+        flex-direction: row;
+      }
+    }
+  }
+}
