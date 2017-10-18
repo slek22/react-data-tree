@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import Demo, {props as P} from 'react-demo'
+import Demo, { props as P } from 'react-demo'
 import Tree from 'react-data-tree'
 
-import './index.css'
+import './App.css'
 
 export default class App extends Component {
   render () {
@@ -13,7 +13,7 @@ export default class App extends Component {
           target={Tree}
           props={{
             rootPosition: P.choices(['top', 'right', 'bottom', 'left']),
-            nodesClassName: P.choices(['test1', 'test2', 'test3']),
+            nodesClassName: P.choices(['', 'example-1', 'example-2']),
             connectorsStyle: P.shape({
               tickness: P.number(1),
               color: P.string('DarkSlateGray'),
