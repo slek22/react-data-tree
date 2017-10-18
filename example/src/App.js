@@ -13,6 +13,7 @@ export default class App extends Component {
           target={Tree}
           props={{
             rootPosition: P.choices(['top', 'right', 'bottom', 'left']),
+            nodesClassName: P.choices(['test1', 'test2', 'test3']),
             connectorsStyle: P.shape({
               tickness: P.number(1),
               color: P.string('DarkSlateGray'),
