@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
-import { capitalize } from 'lodash';
 import { oneOf, oneOfType, arrayOf, shape, number, string, node } from 'prop-types';
 
-import { TOP, RIGHT, BOTTOM, LEFT } from './constants';
+import { TOP, RIGHT, BOTTOM, LEFT, DEFAULT_CONNECTORS_STYLE } from './constants';
+import { capitalize, lazyFunction } from './utils';
 
 import './styles.scss';
-
-// for nested proptypes
-const lazyFunction = f => ((...args) => f().apply(this, args));
 
 const nodeShape = oneOfType([
   shape({
@@ -25,6 +22,7 @@ class Tree extends Component {
 
   static propTypes = {
     rootPosition: oneOf([TOP, RIGHT, BOTTOM, LEFT]),
+    nodesClassName: string,
     connectorsStyle: shape({
       tickness: number,
       color: string,
@@ -35,7 +33,8 @@ class Tree extends Component {
   }
 
   static defaultProps = {
-    rootPosition: TOP
+    rootPosition: TOP,
+    nodesClassName: ''
   }
 
   isVertical = () => {
@@ -48,8 +47,6 @@ class Tree extends Component {
     const { rootPosition } = this.props;
     if (!isFirst && !isLast) return capitalize(rootPosition);
     switch (rootPosition) {
-      case TOP:
-        return isFirst ? 'TopLeft' : 'TopRight';
       case RIGHT:
         return isFirst ? 'TopRight' : 'BottomRight';
       case BOTTOM:
@@ -57,12 +54,12 @@ class Tree extends Component {
       case LEFT:
         return isFirst ? 'TopLeft' : 'BottomLeft';
       default:
-        // TODO
+        return isFirst ? 'TopLeft' : 'TopRight'
     }
   }
 
-  getBordersStyle = (isFirst, isLast) => {
-    const { tickness, color, radius, height } = this.props.connectorsStyle;
+  getBordersStyle = (isFirst, isLast, style) => {
+    const { tickness, color, radius, height } = style;
     const bordersPosition = this.getBordersPosition(isFirst, isLast);
     const borderRadiusKey = `border${bordersPosition}Radius`;
     const borderHeightKey = this.isVertical() ? 'height' : 'width';
@@ -74,24 +71,20 @@ class Tree extends Component {
     }
   }
 
-  getBordersOffset = (isFirst, isLast) => {
-    const { tickness } = this.props.connectorsStyle
-
-    if (!tickness) return {};
-
+  getBordersOffset = (isFirst, isLast, style) => {
     let offsetDirection;
     if (isFirst) offsetDirection = this.isVertical() ? 'left' : 'top';
     else if (isLast) offsetDirection = this.isVertical() ? 'right' : 'bottom';
     else return {};
     return {
-      [offsetDirection]: `calc(50% - ${tickness}px / 2)`
+      [offsetDirection]: `calc(50% - ${style.tickness}px / 2)`
     }
   }
 
-  renderNode = (node, index, isFirstNode, isLastNode, hasSibling) => {
-    const { rootPosition, connectorsStyle } = this.props;
+  renderNode = (node, index, isFirstNode, isLastNode, hasSibling, nodesClassName, style) => {
+    const { rootPosition } = this.props;
     const subtreeNodeStyle = hasSibling && (isFirstNode || isLastNode)
-      ? {[`margin${capitalize(rootPosition)}`]: connectorsStyle.height} : {}
+      ? {[`margin${capitalize(rootPosition)}`]: style.height} : {}
     return (
       <li
         className={classnames('Subtree', {
@@ -104,8 +97,8 @@ class Tree extends Component {
           <div
             className='Subtree__Before'
             style={{
-              ...this.getBordersStyle(isFirstNode, isLastNode),
-              ...this.getBordersOffset(isFirstNode, isLastNode)
+              ...this.getBordersStyle(isFirstNode, isLastNode, style),
+              ...this.getBordersOffset(isFirstNode, isLastNode, style)
             }}
           />
         )}
@@ -116,18 +109,22 @@ class Tree extends Component {
           {index > 0 && !isFirstNode && !isLastNode && (
             <div
               className="Subtree__Node__Before"
-              style={this.getBordersStyle()}
+              style={this.getBordersStyle(false, false, style)}
             />
           )}
           {
             node.element
             ? node.element
-            : <div className="Subtree__Node__Content">{node.text}</div>
+            : (
+              <div className={`Subtree__Node__Content ${nodesClassName}`}>
+                {node.text}
+              </div>
+            )
           }
           {node.children && (
             <div
               className="Subtree__Node__After"
-              style={this.getBordersStyle()}
+              style={this.getBordersStyle(false, false, style)}
             />
           )}
         </div>
@@ -139,7 +136,9 @@ class Tree extends Component {
                 `${index}${childIndex}`,
                 childIndex === 0,
                 childIndex === children.length - 1,
-                children.length > 1
+                children.length > 1,
+                nodesClassName,
+                style
               )
             )}
           </ul>
@@ -149,10 +148,22 @@ class Tree extends Component {
   }
 
   render() {
+    const { rootPosition, data, nodesClassName, connectorsStyle } = this.props;
     return (
-      <div className={`Tree Tree--${this.props.rootPosition.toLowerCase()}`}>
+      <div className={`Tree Tree--${rootPosition}`}>
         <ul>
-          {this.renderNode(this.props.data, 0, true, true, false)}
+          {this.renderNode(
+            data,
+            0,
+            true,
+            true,
+            false,
+            nodesClassName,
+            {
+              ...DEFAULT_CONNECTORS_STYLE,
+              ...connectorsStyle
+            }
+          )}
         </ul>
       </div>
     );
