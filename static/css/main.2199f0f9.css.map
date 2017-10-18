@@ -1,0 +1,1 @@
+{"version":3,"sources":["App.css"],"names":[],"mappings":"AAAA,WACE,WACA,uBAAyB,CAG3B,WACE,sBACA,wBAA6B","file":"static/css/main.2199f0f9.css","sourcesContent":[".example-1 {\n  color: white;\n  background-color: indigo;\n}\n\n.example-2 {\n  background-color: white;\n  border: 2px solid LightCoral;\n}\n\n\n\n// WEBPACK FOOTER //\n// ./src/App.css"],"sourceRoot":""}
