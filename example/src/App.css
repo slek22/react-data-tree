@@ -1,9 +1,9 @@
-.example-1 {
+.App .example-1 {
   color: white;
   background-color: indigo;
 }
 
-.example-2 {
+.App .example-2 {
   background-color: white;
   border: 2px solid LightCoral;
 }
